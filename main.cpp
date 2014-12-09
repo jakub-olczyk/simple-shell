@@ -1,12 +1,11 @@
 #include <iostream>
 #include <string>
-#include <algorithm>
 
 const char* ss_version = "v0.1";
 
-void print_prompt(const std::string& currdir)
+void print_prompt()
 {
-	std::cout <<currdir<<"$";
+	std::cout <<"$";
 }
 
 void execute(const std::string& cmd, bool& e)
@@ -37,7 +36,6 @@ if (argc != 1)
 	with_flags(argc, argv);	
 
 std::string command;	
-std::string pwd = "";	
 
 for(bool end=true;end;){
 	print_prompt(pwd);
