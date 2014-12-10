@@ -43,9 +43,9 @@ int execute(const std::string& cmd, bool& e)
 		return 0;
 	}	
 	if (cmd == "exit"){
-		std::cout <<"Bye!";
+		std::cout <<"Bye!"<<std::endl;
 		e=false;
-		return 0;
+	return 0;
 	}
 	int died, status;
 	

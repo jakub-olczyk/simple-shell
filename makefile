@@ -1,9 +1,9 @@
 #compilation 
-CC=g++
-CFLAGS=-std=c++11 -Wall -c
+CC=colorgcc
+CFLAGS=-lstdc++ -std=c++11 -Wall -c
 #linking
-LD=g++
-LDFLAGS=-fno-pretty-templates
+LD=colorgcc
+LDFLAGS=-lstdc++ -fno-pretty-templates
 #
 SRC=$(wildcard *.cpp)
 OBJ=$(patsubst *.o,*.cpp, $(SRC))
