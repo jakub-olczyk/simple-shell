@@ -3,7 +3,7 @@ CC=colorgcc
 CFLAGS=-lstdc++ -std=c++11 -Wall -c
 #linking
 LD=colorgcc
-LDFLAGS=-lstdc++ -fno-pretty-templates
+LDFLAGS=-lstdc++ -std=c++11 -fno-pretty-templates
 #
 SRC=$(wildcard *.cpp)
 OBJ=$(patsubst *.o,*.cpp, $(SRC))

@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
-
-
+#include <cstdint> 
 #include <cstring>
 #include <cstdlib>
 #include <unistd.h>
@@ -12,32 +11,34 @@ const char* ss_version = "v0.1";
 
 void print_prompt()
 {
-	std::cout <<"$";
+	std::cout <<"$ ";
 }
 
-void set_command(std::string& s_cmd, 
-		 		 std::string& path, 
-				 char* cmd, 
-				 char* args[50])
+uint8_t set_command(std::string cmd, char out_args[][1024])	
 {
-	std::string buff;
-	std::string	cmd_out = path;
-	cmd_out += s_cmd.substr(s_cmd.find_first_of(' '));
-	s_cmd.erase(0,s_cmd.find_first_of(' '));
-	std::cout << "\t>>debug: " << s_cmd << std::endl;
-	s_cmd.erase(0);
-	std::cout << "\t>>debug: " << std::endl;
-	for(int i=0;i<50;++i){
-		buff = s_cmd.substr(s_cmd.find_first_of(' '));
-		s_cmd.erase(0,s_cmd.find_first_of(' '));
-		std::strcpy(args[i],buff.c_str());
+	uint8_t argc = 0;
+	uint16_t wordc = 0;
+	for(auto i=cmd.begin();i!=cmd.end();++i){
+		switch (*i){ 
+			case ' ':
+				argc++;
+				wordc = 0;
+				break;
+			default:
+				out_args[argc][wordc] = *i; 
+				out_args[argc][((wordc+1) < 1024) ? (wordc+1) : wordc] = '\0'; 
+				wordc++;
+		}
 	}
-	std::strcpy(cmd,cmd_out.c_str());
+	for (int i=0;i<argc;++i){
+		std::cout << out_args[i] << std::endl;
+	}
+	return argc;	
 }
 
 int execute(const std::string& cmd, bool& e)
 {
-	std::cout << "Execute: " + cmd << std::endl;
+	std::cout << "Execute:" + cmd << std::endl;
 	if (cmd == "clear"){
 	   	std::cout << "\x1b\x5b\x48\x1b\x5b\x32\x4a";
 		return 0;
@@ -49,17 +50,16 @@ int execute(const std::string& cmd, bool& e)
 	}
 	int died, status;
 	
-	std::string path= "/usr/bin/";
-	char c_cmd[1024];
-	char c_args[50][1024];
-	set_command(cmd,path,c_cmd,c_args);
+	char set_cmd[1024];
+	char set_args[50][1024];
+	uint8_t argsc = set_command(cmd, set_args); //FIXME
 	pid_t pid; 
 	switch(pid=fork()){
 		case -1 :
 			std::cout<<"Can't start this program\n";
 			std::exit(EXIT_FAILURE);
 		case 0 :
-		  	execl(c_cmd,c_args[0],c_args[1],c_args[2],c_args[3],c_args[3],c_args[5],NULL);
+		  	execv(set_args[0], &set_args[1]); //FIXME
 			std::exit(EXIT_SUCCESS);
 		default:
 			died = wait(&status);
