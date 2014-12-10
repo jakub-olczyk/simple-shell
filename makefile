@@ -3,7 +3,7 @@ CC=g++
 CFLAGS=-std=c++11 -Wall -c
 #linking
 LD=g++
-LDFLAGS=
+LDFLAGS=-fno-pretty-templates
 #
 SRC=$(wildcard *.cpp)
 OBJ=$(patsubst *.o,*.cpp, $(SRC))
