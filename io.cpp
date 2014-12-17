@@ -33,10 +33,10 @@ uint8_t set_command(std::string cmd, char out_args[][1024])
 				wordc++;
 		}
 	}
-	for (int i=0;i<=argc;++i){
-		std::cout << "Wypisuje: ";
-		std::cout << out_args[i] << std::endl;
-	}
+	//for (int i=0;i<=argc;++i){
+		//std::cout << "Wypisuje: ";
+		//std::cout << out_args[i] << std::endl;
+	//}
 	return argc;	
 }
 

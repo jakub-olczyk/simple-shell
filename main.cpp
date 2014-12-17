@@ -13,7 +13,7 @@ const char* ss_version = "v0.1";
 
 int execute(const std::string& cmd, bool& e)
 {
-	std::cout << "Execute:" + cmd << std::endl;
+	//std::cout << "Execute:" + cmd << std::endl;
 	if (cmd == "clear"){
 	   	std::cout << "\x1b\x5b\x48\x1b\x5b\x32\x4a";
 		return 0;
@@ -29,19 +29,23 @@ int execute(const std::string& cmd, bool& e)
 	char set_args[50][1024];
 	uint8_t argsc = set_command(cmd, set_args); //FIXME
 	pid_t pid; 
-	std::cout << "Starting..." << std::endl;
-	std::cout << "\t>>"<<set_args[0] <<" "<< set_args[1] << std::endl;
+	char path[1024] ="/usr/bin/";
+	char error_string[2048] = "-simplesh: ";
 	switch(pid=fork()){
 		case -1 :
 			std::cout<<"Can't start this program\n";
 			std::exit(EXIT_FAILURE);
 		case 0 :
-		  	execv(strcat("/usr/bin/",set_args[0]), reinterpret_cast<char*const*>(&set_args[1])); //FIXME
+			status = 
+				execlp(set_args[0],set_args[0], set_args[1], set_args[2], set_args[3], set_args[4],NULL); //FIXME
+			perror(strcat(error_string,set_args[0]));
 			std::exit(EXIT_SUCCESS);
 		default:
+			std::cout << "status: "<<status <<std::endl;
 			died = wait(&status);
 			return 0; 
 	}
+	clear_command(set_args);
 }
 
 void with_flags(int argc,char* argv[])
@@ -68,11 +72,12 @@ if (argc != 1) {
 }
 
 std::string command;	
+pid_t pID;
 
 for(bool end=true;end;){
 	print_prompt();
 	std::getline(std::cin,command); 
-	execute(command,end);
+	pID = execute(command,end);
 }
 
 return 0;
