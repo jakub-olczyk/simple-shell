@@ -20,6 +20,6 @@ void print_prompt();
 
 uint8_t set_command(std::string, char [][1024]);
 
-void clear_command(char [][1024]);
+void clear_command(size_t, char [][1024]);
 
 #endif

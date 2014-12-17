@@ -40,10 +40,14 @@ uint8_t set_command(std::string cmd, char out_args[][1024])
 	return argc;	
 }
 
-void clear_command(char args[][1024])
+void clear_command(size_t size, char args[][1024])
 {
-
-
+	for (int i=0; i!= size; ++i)
+		for (int j=0; j<1024; ++j)
+			if (args[i][j] != '\0') 
+			   	args[i][j]= '\0';
+			else
+				break;
 
 }
 

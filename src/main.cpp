@@ -9,7 +9,7 @@
 
 #include "io.hpp"
 
-const char* ss_version = "v0.1";
+const char* ss_version = "prealpha v0.1";
 
 int execute(const std::string& cmd, bool& e)
 {
@@ -45,7 +45,7 @@ int execute(const std::string& cmd, bool& e)
 			died = wait(&status);
 			return 0; 
 	}
-	clear_command(set_args);
+	clear_command(argsc+1, set_args);
 }
 
 void with_flags(int argc,char* argv[])
@@ -54,12 +54,17 @@ for (int i=1;i<argc;++i) {
 	if (argv[i][0] != '-') break;
 
 	switch(argv[i][1]){
+		default:
 		case 'h':
 			std::cout <<"Simple Shell "<< ss_version <<"\ncopyleft Jakub Olczyk\nwritten as an OS learning aid" << std::endl;
+			std::cout <<"Options: "<<std::endl;
+			std::cout <<"-h : shows this message"<<std::endl;
+			std::cout <<"-V : shows info about version"<<std::endl;
 			break;
 		case 'V':
 			std::cout <<"Simple Shell "<< ss_version << std::endl;
 			break;
+		
 	}
 }
 }
@@ -72,12 +77,11 @@ if (argc != 1) {
 }
 
 std::string command;	
-pid_t pID;
 
 for(bool end=true;end;){
 	print_prompt();
 	std::getline(std::cin,command); 
-	pID = execute(command,end);
+	execute(command,end);
 }
 
 return 0;

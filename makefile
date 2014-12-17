@@ -5,14 +5,14 @@ CFLAGS=-lstdc++ -std=c++11 -Wall -c
 LD=colorgcc
 LDFLAGS=-lstdc++ -std=c++11 -fno-pretty-templates
 #
-SRC=$(wildcard *.cpp)
-OBJ=$(patsubst *.o,*.cpp, $(SRC))
+SRC=$(wildcard ./src/*.cpp)
+OBJ=$(patsubst ./bin/*.o,./src/*.cpp, $(SRC))
 
 %.o : %.cpp
 	$(CC) $(CFLAGS) -o $@ $<
 
 shell: $(OBJ) 
-	$(LD) -o $@ $^ $(LDFLAGS)
+	$(LD) -o ./bin/$@ $^ $(LDFLAGS)
 
 .PHONY:	clean
 
