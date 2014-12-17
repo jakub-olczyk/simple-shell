@@ -7,34 +7,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#include "io.hpp"
+
 const char* ss_version = "v0.1";
-
-void print_prompt()
-{
-	std::cout <<"$ ";
-}
-
-uint8_t set_command(std::string cmd, char out_args[][1024])	
-{
-	uint8_t argc = 0;
-	uint16_t wordc = 0;
-	for(auto i=cmd.begin();i!=cmd.end();++i){
-		switch (*i){ 
-			case ' ':
-				argc++;
-				wordc = 0;
-				break;
-			default:
-				out_args[argc][wordc] = *i; 
-				out_args[argc][((wordc+1) < 1024) ? (wordc+1) : wordc] = '\0'; 
-				wordc++;
-		}
-	}
-	for (int i=0;i<argc;++i){
-		std::cout << out_args[i] << std::endl;
-	}
-	return argc;	
-}
 
 int execute(const std::string& cmd, bool& e)
 {
@@ -54,12 +29,14 @@ int execute(const std::string& cmd, bool& e)
 	char set_args[50][1024];
 	uint8_t argsc = set_command(cmd, set_args); //FIXME
 	pid_t pid; 
+	std::cout << "Starting..." << std::endl;
+	std::cout << "\t>>"<<set_args[0] <<" "<< set_args[1] << std::endl;
 	switch(pid=fork()){
 		case -1 :
 			std::cout<<"Can't start this program\n";
 			std::exit(EXIT_FAILURE);
 		case 0 :
-		  	execv(set_args[0], &set_args[1]); //FIXME
+		  	execv(strcat("/usr/bin/",set_args[0]), reinterpret_cast<char*const*>(&set_args[1])); //FIXME
 			std::exit(EXIT_SUCCESS);
 		default:
 			died = wait(&status);
@@ -85,8 +62,10 @@ for (int i=1;i<argc;++i) {
 
 int main(int argc, char* argv[])
 {
-if (argc != 1) 
+if (argc != 1) {
 	with_flags(argc, argv);	
+	return 0;
+}
 
 std::string command;	
 
