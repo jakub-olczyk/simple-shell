@@ -13,3 +13,6 @@
 #additional
 shell
 error
+#vim
+*.swp
+*.*.swp
